@@ -502,6 +502,58 @@ class SmartElementExtractor:
             logger.error(f"智能提取帖子数据时出错: {e}")
             return None
     
+    def extract_from_meta_tags(self) -> Dict:
+        """从meta标签提取信息作为备用数据源"""
+        try:
+            meta_data = {}
+            
+            # 从meta description提取内容
+            try:
+                desc_element = self.driver.find_element(By.XPATH, "//meta[@name='description']")
+                description = desc_element.get_attribute("content")
+                if description and len(description) > 10:
+                    meta_data['note_text'] = description
+                    meta_data['description'] = description[:100] + "..." if len(description) > 100 else description
+            except:
+                pass
+            
+            # 从og:url提取链接
+            try:
+                url_element = self.driver.find_element(By.XPATH, "//meta[@property='og:url']")
+                url = url_element.get_attribute("content")
+                if url:
+                    meta_data['link'] = url
+            except:
+                pass
+            
+            # 从og:title提取标题
+            try:
+                title_element = self.driver.find_element(By.XPATH, "//meta[@property='og:title']")
+                title = title_element.get_attribute("content")
+                if title:
+                    # 清理标题，移除" - 小红书"后缀
+                    title = title.replace(" - 小红书", "").strip()
+                    if len(title) > 3:
+                        meta_data['title'] = title
+            except:
+                pass
+            
+            # 从og:xhs标签提取点赞数等信息
+            try:
+                like_element = self.driver.find_element(By.XPATH, "//meta[@property='og:xhs:note_like']")
+                likes = like_element.get_attribute("content")
+                if likes:
+                    meta_data['likes'] = likes.replace('+', '') if '+' in likes else likes
+            except:
+                pass
+            
+            logger.info(f"从meta标签提取到 {len(meta_data)} 个字段: {list(meta_data.keys())}")
+            return meta_data
+            
+        except Exception as e:
+            logger.debug(f"从meta标签提取信息失败: {e}")
+            return {}
+    
     def _extract_text_smart(self, element) -> str:
         """智能提取文本"""
         try:

@@ -190,11 +190,34 @@ class EnhancedXiaohongshuFundScraper:
             # 等待JavaScript完成
             self.wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
             
+            # 等待可能的React/Vue渲染完成
+            try:
+                self.wait.until(lambda driver: driver.execute_script(
+                    "return typeof window.React !== 'undefined' || typeof window.Vue !== 'undefined' || document.querySelectorAll('[data-reactroot], [id=\"app\"], [id=\"root\"]').length > 0"
+                ))
+                logger.debug("检测到前端框架")
+            except TimeoutException:
+                logger.debug("未检测到前端框架或超时")
+            
+            # 等待动态内容元素出现
+            for attempt in range(3):
+                try:
+                    # 检查是否有内容元素
+                    element_count = self.driver.execute_script(
+                        "return document.querySelectorAll('div, section, article, [class*=\"note\"], [class*=\"card\"], [class*=\"item\"]').length"
+                    )
+                    if element_count > 20:  # 如果有足够的元素，说明内容已加载
+                        logger.debug(f"检测到 {element_count} 个元素，内容可能已加载")
+                        break
+                    time.sleep(2)
+                except:
+                    time.sleep(2)
+            
             # 智能等待动态内容
             time.sleep(self.anti_detection.get_delay('page_load'))
             
         except TimeoutException:
-            logger.warning("页面加载超时")
+            logger.warning("页面加载超时，但继续执行")
     
     def _handle_redirects_and_captchas(self) -> bool:
         """处理重定向和验证码"""
@@ -344,8 +367,46 @@ class EnhancedXiaohongshuFundScraper:
         """增强的搜索结果解析"""
         logger.info("开始解析搜索结果...")
         
+        # 额外等待JavaScript内容完全渲染
+        logger.info("等待动态内容加载...")
+        time.sleep(5)
+        
+        # 尝试等待具体元素出现
+        try:
+            self.wait.until(lambda driver: driver.execute_script(
+                "return document.querySelectorAll('[class*=\"note\"], [class*=\"card\"], [class*=\"item\"]').length > 0"
+            ))
+            logger.info("检测到动态内容已加载")
+        except TimeoutException:
+            logger.warning("等待动态内容超时，继续解析")
+        
         # 使用自适应选择器查找帖子元素
         post_elements = self.selector_manager.find_elements_adaptive(self.driver, 'post', timeout=15)
+        
+        # 如果找不到帖子元素，尝试通用元素查找
+        if not post_elements:
+            logger.warning("未找到帖子元素，尝试通用选择器...")
+            generic_selectors = [
+                "//div[contains(@class, 'note')]",
+                "//div[contains(@class, 'card')]", 
+                "//div[contains(@class, 'item')]",
+                "//section",
+                "//article",
+                "//div[@role='article']",
+                "//a[contains(@href, '/explore/')]/..",
+                "//div[.//img and .//span[text()]]"
+            ]
+            
+            for selector in generic_selectors:
+                try:
+                    elements = self.driver.find_elements(By.XPATH, selector)
+                    visible_elements = [e for e in elements if e.is_displayed() and e.size['height'] > 50]
+                    if visible_elements:
+                        post_elements = visible_elements
+                        logger.info(f"通过通用选择器找到 {len(post_elements)} 个元素: {selector}")
+                        break
+                except:
+                    continue
         
         if not post_elements:
             logger.warning("未找到帖子元素，尝试发现新选择器...")
@@ -356,9 +417,15 @@ class EnhancedXiaohongshuFundScraper:
                 # 重新尝试查找
                 post_elements = self.selector_manager.find_elements_adaptive(self.driver, 'post', timeout=10)
         
+        # 如果仍然没有找到帖子元素，尝试从meta标签提取单个帖子信息
         if not post_elements:
-            logger.error("仍然未找到帖子元素")
-            return []
+            logger.warning("仍然未找到帖子元素，尝试从meta标签提取信息...")
+            meta_post = self._extract_single_post_from_meta()
+            if meta_post:
+                return [meta_post]
+            else:
+                logger.error("所有提取方法都失败了")
+                return []
         
         logger.info(f"找到 {len(post_elements)} 个帖子元素")
         
@@ -369,6 +436,19 @@ class EnhancedXiaohongshuFundScraper:
             try:
                 # 使用智能元素提取器
                 post_data = self.element_extractor.extract_post_data_smart(element)
+                
+                # 如果常规提取失败，尝试从meta标签补充信息
+                if not post_data or not post_data.get('note_text') or not post_data.get('link'):
+                    logger.debug(f"帖子 {i+1} 常规提取不完整，尝试meta标签补充...")
+                    meta_data = self.element_extractor.extract_from_meta_tags()
+                    if meta_data:
+                        if not post_data:
+                            post_data = meta_data
+                        else:
+                            # 补充缺失字段
+                            for key, value in meta_data.items():
+                                if not post_data.get(key) and value:
+                                    post_data[key] = value
                 
                 if post_data and self._is_valid_fund_post(post_data):
                     # 添加额外信息
@@ -393,6 +473,31 @@ class EnhancedXiaohongshuFundScraper:
         
         logger.info(f"成功解析 {len(posts)} 个有效帖子")
         return posts
+    
+    def _extract_single_post_from_meta(self) -> Optional[Dict]:
+        """从meta标签提取单个帖子信息"""
+        try:
+            current_url = self.driver.current_url
+            if '/explore/' not in current_url:
+                return None
+            
+            meta_data = self.element_extractor.extract_from_meta_tags()
+            if not meta_data or not meta_data.get('title'):
+                return None
+            
+            # 补充缺失的默认值
+            meta_data.setdefault('author', '未知作者')
+            meta_data.setdefault('author_followers', 0)
+            meta_data.setdefault('post_time', None)
+            meta_data.setdefault('post_time_raw', '')
+            meta_data.setdefault('likes', '0')
+            
+            logger.info(f"从meta标签成功提取帖子: {meta_data['title'][:50]}...")
+            return meta_data
+            
+        except Exception as e:
+            logger.error(f"从meta标签提取单个帖子失败: {e}")
+            return None
     
     def _is_valid_fund_post(self, post_data: Dict) -> bool:
         """验证是否为有效的基金帖子"""
