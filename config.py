@@ -127,6 +127,46 @@ class SelectorConfig:
         ".//div[contains(@class, 'name')]"
     ]
     
+    NOTE_TEXT_SELECTORS = [
+        ".//div[contains(@class, 'note-text')]",
+        ".//span[contains(@class, 'note-text')]",
+        ".//div[contains(@class, 'note-content')]",
+        ".//div[contains(@class, 'text-content')]",
+        ".//div[contains(@class, 'desc-content')]",
+        ".//div[contains(@class, 'note-desc')]",
+        ".//p[contains(@class, 'note-text')]",
+        ".//div[contains(@class, 'content-text')]"
+    ]
+    
+    AUTHOR_FOLLOWERS_SELECTORS = [
+        ".//span[contains(@class, 'followers')]",
+        ".//div[contains(@class, 'followers')]",
+        ".//span[contains(@class, 'fans')]",
+        ".//div[contains(@class, 'fans')]",
+        ".//span[contains(text(), '粉丝')]",
+        ".//div[contains(text(), '粉丝')]",
+        ".//span[contains(@class, 'follower-count')]",
+        ".//div[contains(@class, 'user-stats')]//span[contains(text(), '粉丝')]",
+        ".//div[contains(@class, 'author-info')]//span[contains(text(), '粉丝')]"
+    ]
+    
+    POST_TIME_SELECTORS = [
+        ".//time",
+        ".//span[contains(@class, 'time')]",
+        ".//div[contains(@class, 'time')]",
+        ".//span[contains(@class, 'date')]",
+        ".//div[contains(@class, 'date')]",
+        ".//span[contains(@class, 'publish-time')]",
+        ".//div[contains(@class, 'publish-time')]",
+        ".//span[contains(@class, 'post-time')]",
+        ".//div[contains(@class, 'create-time')]",
+        ".//span[contains(text(), '小时前')]",
+        ".//span[contains(text(), '分钟前')]",
+        ".//span[contains(text(), '今天')]",
+        ".//span[contains(text(), '昨天')]",
+        ".//div[contains(@class, 'timestamp')]"
+    ]
+    
     CAPTCHA_SELECTORS = [
         "//div[contains(@class, 'captcha')]",
         "//img[contains(@src, 'captcha')]",

@@ -406,6 +406,13 @@ class EnhancedXiaohongshuFundScraper:
         if not title or title == "未知标题" or len(title) < self.config.min_title_length:
             return False
         
+        # 时间过滤 - 只保留今天发布的帖子
+        post_time = post_data.get('post_time')
+        if post_time and hasattr(self.element_extractor, 'is_today_post'):
+            if not self.element_extractor.is_today_post(post_time):
+                logger.debug(f"过滤非当天帖子: {title[:30]}... (发布时间: {post_data.get('post_time_raw', 'unknown')})")
+                return False
+        
         # 垃圾内容过滤
         combined_text = f"{title} {description}".lower()
         for spam_keyword in self.config.spam_keywords:

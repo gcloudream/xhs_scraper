@@ -111,6 +111,51 @@ class AdaptiveSelectorManager:
             SelectorCandidate(".//div[@data-href]", "xpath", 4),
             SelectorCandidate(".//span[@data-href]", "xpath", 5),
         ]
+        
+        # note-text内容选择器库
+        self.note_text_selectors = [
+            SelectorCandidate(".//div[contains(@class, 'note-text')]", "xpath", 1),
+            SelectorCandidate(".//span[contains(@class, 'note-text')]", "xpath", 2),
+            SelectorCandidate(".//div[contains(@class, 'note-content')]", "xpath", 3),
+            SelectorCandidate(".//div[contains(@class, 'text-content')]", "xpath", 4),
+            SelectorCandidate(".//div[contains(@class, 'desc-content')]", "xpath", 5),
+            SelectorCandidate(".//div[contains(@class, 'note-desc')]", "xpath", 6),
+            SelectorCandidate(".//p[contains(@class, 'note-text')]", "xpath", 7),
+            SelectorCandidate(".//div[contains(@class, 'content-text')]", "xpath", 8),
+            SelectorCandidate(".//div[contains(@class, 'main-content')]", "xpath", 9),
+            SelectorCandidate(".//span[contains(@class, 'desc') and string-length(text()) > 10]", "xpath", 10),
+        ]
+        
+        # 作者粉丝量选择器库
+        self.author_followers_selectors = [
+            SelectorCandidate(".//span[contains(@class, 'followers')]", "xpath", 1),
+            SelectorCandidate(".//div[contains(@class, 'followers')]", "xpath", 2),
+            SelectorCandidate(".//span[contains(@class, 'fans')]", "xpath", 3),
+            SelectorCandidate(".//div[contains(@class, 'fans')]", "xpath", 4),
+            SelectorCandidate(".//span[contains(text(), '粉丝')]", "xpath", 5),
+            SelectorCandidate(".//div[contains(text(), '粉丝')]", "xpath", 6),
+            SelectorCandidate(".//span[contains(@class, 'follower-count')]", "xpath", 7),
+            SelectorCandidate(".//div[contains(@class, 'user-stats')]//span[contains(text(), '粉丝')]", "xpath", 8),
+            SelectorCandidate(".//div[contains(@class, 'author-info')]//span[contains(text(), '粉丝')]", "xpath", 9),
+        ]
+        
+        # 发帖时间选择器库
+        self.post_time_selectors = [
+            SelectorCandidate(".//time", "xpath", 1),
+            SelectorCandidate(".//span[contains(@class, 'time')]", "xpath", 2),
+            SelectorCandidate(".//div[contains(@class, 'time')]", "xpath", 3),
+            SelectorCandidate(".//span[contains(@class, 'date')]", "xpath", 4),
+            SelectorCandidate(".//div[contains(@class, 'date')]", "xpath", 5),
+            SelectorCandidate(".//span[contains(@class, 'publish-time')]", "xpath", 6),
+            SelectorCandidate(".//div[contains(@class, 'publish-time')]", "xpath", 7),
+            SelectorCandidate(".//span[contains(@class, 'post-time')]", "xpath", 8),
+            SelectorCandidate(".//div[contains(@class, 'create-time')]", "xpath", 9),
+            SelectorCandidate(".//span[contains(text(), '小时前')]", "xpath", 10),
+            SelectorCandidate(".//span[contains(text(), '分钟前')]", "xpath", 11),
+            SelectorCandidate(".//span[contains(text(), '今天')]", "xpath", 12),
+            SelectorCandidate(".//span[contains(text(), '昨天')]", "xpath", 13),
+            SelectorCandidate(".//div[contains(@class, 'timestamp')]", "xpath", 14),
+        ]
     
     def _load_cache(self) -> Dict:
         """加载选择器缓存"""
@@ -159,7 +204,10 @@ class AdaptiveSelectorManager:
             'post': self.post_selectors,
             'title': self.title_selectors,
             'author': self.author_selectors,
-            'link': self.link_selectors
+            'link': self.link_selectors,
+            'note_text': self.note_text_selectors,
+            'author_followers': self.author_followers_selectors,
+            'post_time': self.post_time_selectors
         }
         
         if selector_type not in selector_lists:
@@ -221,7 +269,10 @@ class AdaptiveSelectorManager:
         selector_lists = {
             'title': self.title_selectors,
             'author': self.author_selectors,
-            'link': self.link_selectors
+            'link': self.link_selectors,
+            'note_text': self.note_text_selectors,
+            'author_followers': self.author_followers_selectors,
+            'post_time': self.post_time_selectors
         }
         
         if selector_type not in selector_lists:
@@ -415,6 +466,32 @@ class SmartElementExtractor:
             else:
                 post_data['link'] = ""
             
+            # 提取note-text内容
+            note_text_element = self.selector_manager.find_element_in_parent_adaptive(post_element, 'note_text')
+            if note_text_element:
+                note_text = self._extract_text_smart(note_text_element)
+                post_data['note_text'] = note_text if note_text else ""
+            else:
+                post_data['note_text'] = ""
+            
+            # 提取作者粉丝量
+            followers_element = self.selector_manager.find_element_in_parent_adaptive(post_element, 'author_followers')
+            if followers_element:
+                followers_text = self._extract_text_smart(followers_element)
+                post_data['author_followers'] = self._parse_followers_count(followers_text)
+            else:
+                post_data['author_followers'] = 0
+            
+            # 提取发帖时间
+            time_element = self.selector_manager.find_element_in_parent_adaptive(post_element, 'post_time')
+            if time_element:
+                time_text = self._extract_text_smart(time_element)
+                post_data['post_time'] = self._parse_post_time(time_text)
+                post_data['post_time_raw'] = time_text
+            else:
+                post_data['post_time'] = None
+                post_data['post_time_raw'] = ""
+            
             # 提取其他信息
             post_data['likes'] = self._extract_likes_smart(post_element)
             post_data['description'] = self._extract_description_smart(post_element, post_data['title'])
@@ -490,4 +567,118 @@ class SmartElementExtractor:
                 continue
         
         # 如果没有找到描述，使用标题
-        return title if title != "未知标题" else ""
+        return title[:50] + "..." if len(title) > 50 else title
+    
+    def _parse_followers_count(self, followers_text: str) -> int:
+        """解析粉丝数量文本"""
+        if not followers_text:
+            return 0
+        
+        import re
+        # 清理文本
+        text = followers_text.strip().replace('粉丝', '').replace('关注', '').replace('followers', '')
+        
+        # 匹配数字模式
+        patterns = [
+            r'(\d+\.?\d*)[wW万]',  # 匹配 "5.2w" 或 "5.2万"
+            r'(\d+\.?\d*)[kK千]',  # 匹配 "5.2k" 或 "5.2千"
+            r'(\d+)',              # 匹配纯数字
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text)
+            if match:
+                num = float(match.group(1))
+                if 'w' in text.lower() or '万' in text:
+                    return int(num * 10000)
+                elif 'k' in text.lower() or '千' in text:
+                    return int(num * 1000)
+                else:
+                    return int(num)
+        
+        return 0
+    
+    def _parse_post_time(self, time_text: str) -> Optional[str]:
+        """解析发帖时间文本，返回标准化时间字符串"""
+        if not time_text:
+            return None
+        
+        import re
+        from datetime import datetime, timedelta
+        
+        text = time_text.strip()
+        now = datetime.now()
+        
+        # 匹配"几分钟前"
+        minutes_match = re.search(r'(\d+)分钟前', text)
+        if minutes_match:
+            minutes = int(minutes_match.group(1))
+            post_time = now - timedelta(minutes=minutes)
+            return post_time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        # 匹配"几小时前"
+        hours_match = re.search(r'(\d+)小时前', text)
+        if hours_match:
+            hours = int(hours_match.group(1))
+            post_time = now - timedelta(hours=hours)
+            return post_time.strftime('%Y-%m-%d %H:%M:%S')
+        
+        # 匹配"今天"
+        if '今天' in text:
+            time_match = re.search(r'(\d{1,2}):(\d{2})', text)
+            if time_match:
+                hour = int(time_match.group(1))
+                minute = int(time_match.group(2))
+                post_time = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+                return post_time.strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                return now.strftime('%Y-%m-%d') + ' 00:00:00'
+        
+        # 匹配"昨天"
+        if '昨天' in text:
+            yesterday = now - timedelta(days=1)
+            time_match = re.search(r'(\d{1,2}):(\d{2})', text)
+            if time_match:
+                hour = int(time_match.group(1))
+                minute = int(time_match.group(2))
+                post_time = yesterday.replace(hour=hour, minute=minute, second=0, microsecond=0)
+                return post_time.strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                return yesterday.strftime('%Y-%m-%d') + ' 00:00:00'
+        
+        # 匹配标准日期格式
+        date_patterns = [
+            r'(\d{4})-(\d{1,2})-(\d{1,2})\s+(\d{1,2}):(\d{2})',
+            r'(\d{1,2})-(\d{1,2})\s+(\d{1,2}):(\d{2})',
+            r'(\d{4})/(\d{1,2})/(\d{1,2})\s+(\d{1,2}):(\d{2})',
+        ]
+        
+        for pattern in date_patterns:
+            match = re.search(pattern, text)
+            if match:
+                try:
+                    if len(match.groups()) == 5:  # 完整日期
+                        year, month, day, hour, minute = match.groups()
+                        post_time = datetime(int(year), int(month), int(day), int(hour), int(minute))
+                    else:  # 月-日格式
+                        month, day, hour, minute = match.groups()
+                        post_time = datetime(now.year, int(month), int(day), int(hour), int(minute))
+                    
+                    return post_time.strftime('%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    continue
+        
+        return None
+    
+    def is_today_post(self, post_time_str: str) -> bool:
+        """判断帖子是否为今天发布"""
+        if not post_time_str:
+            return False
+        
+        try:
+            from datetime import datetime
+            post_time = datetime.strptime(post_time_str, '%Y-%m-%d %H:%M:%S')
+            today = datetime.now().date()
+            return post_time.date() == today
+        except ValueError:
+            return False
