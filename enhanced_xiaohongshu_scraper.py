@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Enhanced Xiaohongshu Fund Scraper with Advanced Anti-Detection
 增强的小红书基金爬虫 - 专门用于教育目的的基金知识学习

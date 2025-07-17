@@ -33,3 +33,5 @@
 2025-07-17 19:45:59,140 - enhanced_xiaohongshu_scraper - [32mINFO[0m - info:91 - Captchas encountered: 0
 2025-07-17 19:45:59,140 - enhanced_xiaohongshu_scraper - [32mINFO[0m - info:91 - Posts scraped: 10
 2025-07-17 19:45:59,141 - enhanced_xiaohongshu_scraper - [32mINFO[0m - info:91 - Detailed statistics saved to: logs\session_stats_20250717_194559.json
+2025-07-17 20:50:44,211 - enhanced_xiaohongshu_scraper - [32mINFO[0m - info:91 - Scraping session started
+2025-07-17 20:51:02,280 - enhanced_xiaohongshu_scraper - [32mINFO[0m - info:91 - Scraping session started

@@ -14,24 +14,24 @@ This is a Xiaohongshu (Little Red Book) educational scraper designed for learnin
 
 **Basic version:**
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 **Enhanced version (recommended):**
 ```bash
-pip install -r requirements_enhanced.txt
+pip3 install -r requirements_enhanced.txt
 ```
 
 ### Running the Scrapers
 
 **Basic scraper:**
 ```bash
-python xiaohongshu_fund_scraper.py
+python3 xiaohongshu_fund_scraper.py
 ```
 
 **Enhanced scraper (recommended):**
 ```bash
-python enhanced_xiaohongshu_scraper.py
+python3 enhanced_xiaohongshu_scraper.py
 ```
 
 ### Development Setup

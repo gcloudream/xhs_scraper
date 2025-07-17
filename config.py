@@ -128,8 +128,10 @@ class SelectorConfig:
     ]
     
     NOTE_TEXT_SELECTORS = [
-        ".//div[contains(@class, 'note-text')]",
         ".//span[contains(@class, 'note-text')]",
+        ".//div[@id='detail-desc']//span[contains(@class, 'note-text')]",
+        ".//div[contains(@class, 'desc')]//span[contains(@class, 'note-text')]",
+        ".//div[contains(@class, 'note-text')]",
         ".//div[contains(@class, 'note-content')]",
         ".//div[contains(@class, 'text-content')]",
         ".//div[contains(@class, 'desc-content')]",

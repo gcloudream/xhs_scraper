@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Adaptive selector system for handling dynamic web elements
 自适应选择器系统，应对动态网页元素变化
@@ -81,15 +82,16 @@ class AdaptiveSelectorManager:
         
         # 标题选择器库
         self.title_selectors = [
-            SelectorCandidate(".//span[contains(@class, 'title')]", "xpath", 1),
-            SelectorCandidate(".//a[contains(@class, 'title')]", "xpath", 2),
-            SelectorCandidate(".//div[contains(@class, 'title')]", "xpath", 3),
-            SelectorCandidate(".//h1 | .//h2 | .//h3", "xpath", 4),
-            SelectorCandidate(".//span[contains(@class, 'desc')]", "xpath", 5),
-            SelectorCandidate(".//div[contains(@class, 'content')]", "xpath", 6),
-            SelectorCandidate(".//p[contains(@class, 'title')]", "xpath", 7),
-            SelectorCandidate(".//div[contains(@class, 'text')]//span[string-length(text()) > 5]", "xpath", 8),
-            SelectorCandidate(".//a[@href]//span[string-length(text()) > 5]", "xpath", 9),
+            SelectorCandidate(".//div[@id='detail-title']", "xpath", 1),
+            SelectorCandidate(".//div[contains(@class, 'title')]", "xpath", 2),
+            SelectorCandidate(".//span[contains(@class, 'title')]", "xpath", 3),
+            SelectorCandidate(".//a[contains(@class, 'title')]", "xpath", 4),
+            SelectorCandidate(".//h1 | .//h2 | .//h3", "xpath", 5),
+            SelectorCandidate(".//span[contains(@class, 'desc')]", "xpath", 6),
+            SelectorCandidate(".//div[contains(@class, 'content')]", "xpath", 7),
+            SelectorCandidate(".//p[contains(@class, 'title')]", "xpath", 8),
+            SelectorCandidate(".//div[contains(@class, 'text')]//span[string-length(text()) > 5]", "xpath", 9),
+            SelectorCandidate(".//a[@href]//span[string-length(text()) > 5]", "xpath", 10),
         ]
         
         # 作者选择器库
@@ -114,16 +116,21 @@ class AdaptiveSelectorManager:
         
         # note-text内容选择器库
         self.note_text_selectors = [
-            SelectorCandidate(".//div[contains(@class, 'note-text')]", "xpath", 1),
-            SelectorCandidate(".//span[contains(@class, 'note-text')]", "xpath", 2),
-            SelectorCandidate(".//div[contains(@class, 'note-content')]", "xpath", 3),
-            SelectorCandidate(".//div[contains(@class, 'text-content')]", "xpath", 4),
-            SelectorCandidate(".//div[contains(@class, 'desc-content')]", "xpath", 5),
-            SelectorCandidate(".//div[contains(@class, 'note-desc')]", "xpath", 6),
-            SelectorCandidate(".//p[contains(@class, 'note-text')]", "xpath", 7),
-            SelectorCandidate(".//div[contains(@class, 'content-text')]", "xpath", 8),
-            SelectorCandidate(".//div[contains(@class, 'main-content')]", "xpath", 9),
-            SelectorCandidate(".//span[contains(@class, 'desc') and string-length(text()) > 10]", "xpath", 10),
+            SelectorCandidate("//span[contains(@class, 'note-text')]", "xpath", 1),
+            SelectorCandidate("//div[@id='detail-desc']//span[contains(@class, 'note-text')]", "xpath", 2),
+            SelectorCandidate("//div[contains(@class, 'desc')]//span[contains(@class, 'note-text')]", "xpath", 3),
+            SelectorCandidate(".//span[contains(@class, 'note-text')]", "xpath", 4),
+            SelectorCandidate(".//div[@id='detail-desc']//span[contains(@class, 'note-text')]", "xpath", 5),
+            SelectorCandidate(".//div[contains(@class, 'desc')]//span[contains(@class, 'note-text')]", "xpath", 6),
+            SelectorCandidate(".//div[contains(@class, 'note-text')]", "xpath", 7),
+            SelectorCandidate(".//div[contains(@class, 'note-content')]", "xpath", 8),
+            SelectorCandidate(".//div[contains(@class, 'text-content')]", "xpath", 9),
+            SelectorCandidate(".//div[contains(@class, 'desc-content')]", "xpath", 10),
+            SelectorCandidate(".//div[contains(@class, 'note-desc')]", "xpath", 11),
+            SelectorCandidate(".//p[contains(@class, 'note-text')]", "xpath", 12),
+            SelectorCandidate(".//div[contains(@class, 'content-text')]", "xpath", 13),
+            SelectorCandidate(".//div[contains(@class, 'main-content')]", "xpath", 14),
+            SelectorCandidate(".//span[contains(@class, 'desc') and string-length(text()) > 10]", "xpath", 15),
         ]
         
         # 作者粉丝量选择器库
