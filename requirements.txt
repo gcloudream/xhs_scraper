@@ -1,0 +1,10 @@
+requests>=2.32.0
+beautifulsoup4>=4.12.3
+lxml>=5.0.0
+selenium>=4.25.0
+fake-useragent>=1.5.1
+webdriver-manager>=4.0.2
+undetected-chromedriver>=3.5.5
+pydantic>=2.5.0
+tenacity>=8.2.3
+python-dotenv>=1.0.0

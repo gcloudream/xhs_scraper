@@ -1,0 +1,36 @@
+# Enhanced Xiaohongshu Scraper Requirements
+# 增强版小红书爬虫依赖包
+
+# Core web scraping
+requests>=2.32.0
+beautifulsoup4>=4.12.3
+lxml>=5.0.0
+
+# Selenium and browser automation
+selenium>=4.25.0
+undetected-chromedriver>=3.5.5
+webdriver-manager>=4.0.2
+
+# Anti-detection and fingerprinting
+fake-useragent>=1.5.1
+
+# Configuration and validation
+pydantic>=2.5.0
+
+# Utilities
+tenacity>=8.2.3
+python-dotenv>=1.0.0
+
+# Image processing (for CAPTCHA solving)
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Scientific computing (for behavior simulation)
+numpy>=1.24.0
+
+# Enhanced logging
+colorama>=0.4.6
+
+# Optional: For advanced CAPTCHA solving
+# tensorflow>=2.13.0  # Uncomment if using ML-based CAPTCHA solving
+# pytorch>=2.0.0      # Alternative to tensorflow

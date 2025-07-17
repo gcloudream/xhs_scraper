@@ -1,0 +1,100 @@
+{
+  "session_stats": {
+    "total_requests": 1,
+    "successful_requests": 1,
+    "failed_requests": 0,
+    "captchas_solved": 1,
+    "posts_scraped": 14,
+    "session_rotations": 0
+  },
+  "session_manager_stats": {
+    "current_session_id": "session_1752744205_7860",
+    "request_count": 1,
+    "error_count": 0,
+    "session_duration": 50.308714151382446,
+    "success_rate": 1.0,
+    "available_sessions": 1,
+    "backup_sessions": 2
+  },
+  "selector_stats": {
+    "post": {
+      "total": 14,
+      "active": 0,
+      "avg_success_rate": 0.0071428571428571435
+    },
+    "title": {
+      "total": 9,
+      "active": 0,
+      "avg_success_rate": 0.0
+    },
+    "author": {
+      "total": 7,
+      "active": 0,
+      "avg_success_rate": 0.0
+    },
+    "link": {
+      "total": 5,
+      "active": 0,
+      "avg_success_rate": 0.0
+    }
+  },
+  "config": {
+    "headless": false,
+    "window_width": 1920,
+    "window_height": 1080,
+    "user_agent_rotation": true,
+    "request_delay_min": 3.0,
+    "request_delay_max": 8.0,
+    "scroll_delay_min": 1.0,
+    "scroll_delay_max": 3.0,
+    "human_behavior_enabled": true,
+    "max_retries": 3,
+    "timeout": 30,
+    "page_load_timeout": 60,
+    "max_posts_per_keyword": 30,
+    "max_scroll_attempts": 5,
+    "max_keywords": 10,
+    "output_csv": true,
+    "output_json": true,
+    "output_directory": "output",
+    "use_proxy": false,
+    "proxy_file": "proxies.txt",
+    "proxy_rotation": true,
+    "default_keywords": [
+      "今日基金",
+      "基金知识",
+      "基金投资",
+      "基金理财",
+      "基金入门"
+    ],
+    "min_title_length": 3,
+    "min_description_length": 5,
+    "spam_keywords": [
+      "广告",
+      "推广",
+      "微信",
+      "QQ",
+      "加我",
+      "联系我",
+      "代理",
+      "招商"
+    ],
+    "required_keywords": [
+      "基金",
+      "投资",
+      "理财",
+      "收益",
+      "净值",
+      "定投",
+      "股票",
+      "债券",
+      "货币",
+      "ETF"
+    ]
+  },
+  "captcha_stats": {
+    "total": 0,
+    "success_rate": 0.0,
+    "avg_duration": 0.0
+  }
+}

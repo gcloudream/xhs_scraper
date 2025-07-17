@@ -1,0 +1,170 @@
+{
+  "post": [
+    {
+      "selector": "//div[@data-notecard]",
+      "by_type": "xpath",
+      "priority": 1,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": "//div[contains(@class, 'note-item') and .//img]",
+      "by_type": "xpath",
+      "priority": 2,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": "//section[contains(@class, 'note') and @data-note-id]",
+      "by_type": "xpath",
+      "priority": 3,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": "//div[contains(@class, 'NoteCard')]",
+      "by_type": "xpath",
+      "priority": 4,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": "//div[contains(@class, 'search-result-item')]",
+      "by_type": "xpath",
+      "priority": 5,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    }
+  ],
+  "title": [
+    {
+      "selector": ".//span[contains(@class, 'title')]",
+      "by_type": "xpath",
+      "priority": 1,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//a[contains(@class, 'title')]",
+      "by_type": "xpath",
+      "priority": 2,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//div[contains(@class, 'title')]",
+      "by_type": "xpath",
+      "priority": 3,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//h1 | .//h2 | .//h3",
+      "by_type": "xpath",
+      "priority": 4,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//span[contains(@class, 'desc')]",
+      "by_type": "xpath",
+      "priority": 5,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    }
+  ],
+  "author": [
+    {
+      "selector": ".//span[contains(@class, 'author')]",
+      "by_type": "xpath",
+      "priority": 1,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//a[contains(@class, 'author')]",
+      "by_type": "xpath",
+      "priority": 2,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//div[contains(@class, 'user')]",
+      "by_type": "xpath",
+      "priority": 3,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//span[contains(@class, 'username')]",
+      "by_type": "xpath",
+      "priority": 4,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//div[contains(@class, 'name')]",
+      "by_type": "xpath",
+      "priority": 5,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    }
+  ],
+  "link": [
+    {
+      "selector": ".//a[@href and contains(@href, '/explore/')]",
+      "by_type": "xpath",
+      "priority": 1,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//a[@href and contains(@href, '/discovery/')]",
+      "by_type": "xpath",
+      "priority": 2,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//a[@href]",
+      "by_type": "xpath",
+      "priority": 3,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//div[@data-href]",
+      "by_type": "xpath",
+      "priority": 4,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    },
+    {
+      "selector": ".//span[@data-href]",
+      "by_type": "xpath",
+      "priority": 5,
+      "success_rate": 0.0,
+      "last_used": 0.0,
+      "element_count": 0
+    }
+  ]
+}
