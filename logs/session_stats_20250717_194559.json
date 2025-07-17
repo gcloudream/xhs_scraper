@@ -1,0 +1,11 @@
+{
+  "start_time": "2025-07-17T19:43:42.888976",
+  "requests_made": 0,
+  "successful_requests": 0,
+  "failed_requests": 0,
+  "captchas_encountered": 0,
+  "posts_scraped": 10,
+  "errors": [],
+  "end_time": "2025-07-17T19:45:59.141082",
+  "duration_seconds": 136.251105
+}

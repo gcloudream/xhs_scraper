@@ -3,18 +3,18 @@
     "total_requests": 1,
     "successful_requests": 1,
     "failed_requests": 0,
-    "captchas_solved": 1,
-    "posts_scraped": 14,
+    "captchas_solved": 0,
+    "posts_scraped": 10,
     "session_rotations": 0
   },
   "session_manager_stats": {
-    "current_session_id": "session_1752744205_7860",
+    "current_session_id": "session_1752752638_4244",
     "request_count": 1,
     "error_count": 0,
-    "session_duration": 50.308714151382446,
+    "session_duration": 118.86647510528564,
     "success_rate": 1.0,
     "available_sessions": 1,
-    "backup_sessions": 2
+    "backup_sessions": 0
   },
   "selector_stats": {
     "post": {
